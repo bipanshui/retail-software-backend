@@ -1,6 +1,8 @@
 package com.bipanshu.retailsoftware.service.impl;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -47,6 +49,14 @@ public class CategoryServiceImpl implements CategoryService{
                         .updatedAt(categoryEntity.getUpdatedAt())
                         .build();
 
+    }
+
+    @Override
+    public List<CategoryResponse> list() {
+         return categoryRepository.findAll()
+                .stream()
+                .map(categoryEntity -> convertToResponse(categoryEntity))
+                .collect(Collectors.toList());
     }
     
 }
