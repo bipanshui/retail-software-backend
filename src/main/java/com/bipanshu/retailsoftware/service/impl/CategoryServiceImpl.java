@@ -23,11 +23,19 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryResponse add(CategoryRequest categoryRequest) {
-         
+        
+        if(categoryRepository.existsByName(categoryRequest.getName())){
+            return CategoryResponse.builder()
+                            .name("Category with name "+categoryRequest.getName() + "exists in the database")
+                            .build();
+        }
+        
         CategoryEntity newCategory =  convertToEntity(categoryRequest);
         newCategory = categoryRepository.save(newCategory);
         return convertToResponse(newCategory);
     }
+
+     
 
     private CategoryEntity convertToEntity(CategoryRequest categoryRequest){
         return CategoryEntity.builder()
@@ -57,6 +65,13 @@ public class CategoryServiceImpl implements CategoryService{
                 .stream()
                 .map(categoryEntity -> convertToResponse(categoryEntity))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(String categoryId){
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryId(categoryId)
+                          .orElseThrow(() -> new RuntimeException("Category with id " + categoryId + " doesn't exist here bro"));
+        categoryRepository.delete(categoryEntity);                  
     }
     
 }
