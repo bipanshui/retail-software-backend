@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
  
-
+import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -26,8 +26,8 @@ public class CategoryController {
     private final CategoryService categoryService;
     
     @GetMapping("/")
-    public String method() {
-        return "It works";
+    public List<CategoryResponse> listCategories(){
+        return categoryService.list();
     }
 
     @PostMapping("/addCategory")
@@ -37,4 +37,5 @@ public class CategoryController {
         return categoryService.add(categoryRequest);   
     }
     
+
 }
